@@ -7,6 +7,7 @@ import {
 } from "typeorm";
 import { BaseEntity } from "../../../common/entities/BaseEntity";
 import { RolePermission } from "./role-permission.entity";
+import { User } from "../../user/entities/user.entity";
 
 @Entity("roles")
 @Unique(["name"])
@@ -37,4 +38,9 @@ export class Role extends BaseEntity {
     (rolePermission) => rolePermission.role
   )
   rolePermissions!: RolePermission[];
+  @OneToMany(
+    () => User,
+    (user) => user.role
+)
+users!: User[];
 }
