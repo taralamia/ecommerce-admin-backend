@@ -1,7 +1,7 @@
 import express from "express";
 import healthRouter from "./routes/health.route";
-import {logger} from "./common/middlewares/logger.middleware";
-import globalErrorHandler from "./common/middlewares/globalErrorHandler";
+import {logger} from "./common/logger/logger.middleware";
+import globalErrorHandler from "./common/errors/globalErrorHandler";
 const app = express();
 
 app.use(express.json());

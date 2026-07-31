@@ -1,5 +1,5 @@
 import { ErrorRequestHandler } from "express";
-import handleError from "../errors/handleError";
+import handleError from "./handleError";
 import sendResponse from "../utils/sendResponse";
 
 const globalErrorHandler: ErrorRequestHandler = (
