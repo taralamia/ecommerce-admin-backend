@@ -3,7 +3,8 @@ import { DataSource } from "typeorm";
 import { env } from "../config/env.config";
 import { Permission } from "../modules/permission/entities/permission.entity";
 import { PermissionGroup } from "../modules/permission/entities/permission-group.entity";
-
+import { Role } from "../modules/role/entities/role.entity";
+import { RolePermission } from "../modules/role/entities/role-permission.entity";
 export const AppDataSource = new DataSource({
   type: "postgres",
   host: env.DB_HOST,
@@ -16,7 +17,7 @@ export const AppDataSource = new DataSource({
   logging: true,
 
   // Register entity classes explicitly so TypeORM picks them up reliably.
-  entities: [Permission, PermissionGroup],
+  entities: [Permission, PermissionGroup, Role, RolePermission],
   migrations: ["src/database/migrations/*.ts"],
 
   subscribers: [],
