@@ -13,7 +13,9 @@ export const AppDataSource = new DataSource({
   synchronize: false,
   logging: true,
 
-  entities: ["src/modules/**/*.entity.ts"],
+  // Any future entity should be placed under src/ and named *.entity.ts
+  // so TypeORM can discover it automatically.
+  entities: ["src/**/*.entity.ts"],
   migrations: ["src/database/migrations/*.ts"],
 
   subscribers: [],
