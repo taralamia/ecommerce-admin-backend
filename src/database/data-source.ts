@@ -1,6 +1,8 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
 import { env } from "../config/env.config";
+import { Permission } from "../modules/permission/entities/permission.entity";
+import { PermissionGroup } from "../modules/permission/entities/permission-group.entity";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -13,9 +15,8 @@ export const AppDataSource = new DataSource({
   synchronize: false,
   logging: true,
 
-  // Any future entity should be placed under src/ and named *.entity.ts
-  // so TypeORM can discover it automatically.
-  entities: ["src/**/*.entity.ts"],
+  // Register entity classes explicitly so TypeORM picks them up reliably.
+  entities: [Permission, PermissionGroup],
   migrations: ["src/database/migrations/*.ts"],
 
   subscribers: [],
