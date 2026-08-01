@@ -1,5 +1,5 @@
 import express from "express";
-import healthRouter from "./routes/health.route";
+import routes from "./routes/index";
 import {logger} from "./common/logger/logger.middleware";
 import globalErrorHandler from "./common/errors/globalErrorHandler";
 const app = express();
@@ -7,6 +7,6 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(logger);
-app.use("/api/v1", healthRouter);
+app.use("/api/v1", routes);
 app.use(globalErrorHandler);
 export default app;
