@@ -1,6 +1,6 @@
 import { AppDataSource } from "../../database/data-source";
 import { User } from "../user/entities/user.entity";
-import  AppError  from "../../common/errors/AppError";
+import AppError from "../../common/errors/AppError";
 import { comparePassword } from "../../common/utils/password";
 import {
   generateAccessToken,
@@ -8,6 +8,7 @@ import {
 } from "../../common/utils/jwt";
 import * as bcrypt from "bcrypt";
 import { mapUserResponse } from "../user/user.mapper";
+
 export class AuthService {
   private userRepository = AppDataSource.getRepository(User);
 
@@ -58,6 +59,27 @@ export class AuthService {
       refreshToken,
       user: mapUserResponse(user),
     };
+  }
+
+  async getCurrentUser(userId: string) {
+    const user = await this.userRepository.findOne({
+      where: {
+        id: userId,
+      },
+      relations: {
+        role: {
+          rolePermissions: {
+            permission: true,
+          },
+        },
+      },
+    });
+
+    if (!user) {
+      throw new AppError(404, "User not found");
+    }
+
+    return mapUserResponse(user);
   }
 }
 
