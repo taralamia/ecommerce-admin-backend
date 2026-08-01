@@ -10,7 +10,11 @@ import { User } from "../../modules/user/entities/user.entity";
 
 import { hashPassword } from "../../common/utils/password";
 
-import { permissionGroups } from "./seed-data";
+import {
+  roles, permissionGroups,
+  catalogPermissions,
+  seedUsers,
+} from "./seed-data";
 
 async function seed() {
   try {
@@ -100,7 +104,116 @@ async function seed() {
     }
 
     console.log("✅ Permissions seeded.");
+    // ==========================================
+    // STEP 3
+    // Seed Roles
+    // ==========================================
 
+    for (const role of roles) {
+      const exists = await roleRepository.findOne({
+        where: {
+          name: role.name,
+        },
+      });
+
+      if (!exists) {
+        await roleRepository.save(
+          roleRepository.create(role)
+        );
+      }
+
+      console.log(`✔ ${role.name}`);
+    }
+
+    console.log("✅ Roles seeded.");
+
+    for (const userSeed of seedUsers) {
+      const role = await roleRepository.findOneBy({
+        name: userSeed.roleName,
+      });
+
+      if (!role) {
+        throw new Error(`Role not found for seeded user: ${userSeed.roleName}`);
+      }
+
+      const existingUser = await userRepository.findOne({
+        where: {
+          email: userSeed.email,
+        },
+      });
+
+      if (!existingUser) {
+        const passwordHash = await hashPassword(userSeed.password);
+
+        await userRepository.save(
+          userRepository.create({
+            name: userSeed.name,
+            email: userSeed.email,
+            passwordHash,
+            phone: userSeed.phone,
+            gender: userSeed.gender,
+            isActive: userSeed.isActive,
+            roleId: role.id,
+            role,
+          })
+        );
+      }
+
+      console.log(`✔ ${userSeed.email}`);
+    }
+
+    console.log("✅ Users seeded.");
+
+    const superAdminRole = await roleRepository.findOneByOrFail({
+      name: "Super Administrator",
+    });
+
+    const catalogRole = await roleRepository.findOneByOrFail({
+      name: "Catalog Manager",
+    });
+    const allPermissions =
+      await permissionRepository.find();
+    for (const permission of allPermissions) {
+      const exists =
+        await rolePermissionRepository.findOne({
+          where: {
+            roleId: superAdminRole.id,
+            permissionId: permission.id,
+          },
+        });
+
+      if (!exists) {
+        await rolePermissionRepository.save({
+          roleId: superAdminRole.id,
+          permissionId: permission.id,
+        });
+      }
+    }
+
+    console.log("✅ Super Admin permissions assigned.");
+    for (const permissionName of catalogPermissions) {
+      const permission =
+        await permissionRepository.findOneByOrFail({
+          name: permissionName,
+        });
+
+      const exists =
+        await rolePermissionRepository.findOne({
+          where: {
+            roleId: catalogRole.id,
+            permissionId: permission.id,
+          },
+        });
+
+      if (!exists) {
+        await rolePermissionRepository.save({
+          roleId: catalogRole.id,
+          permissionId: permission.id,
+        });
+      }
+    }
+
+    console.log("✅ Catalog permissions assigned.");
     console.log("✅ Seed completed.");
 
     await AppDataSource.destroy();

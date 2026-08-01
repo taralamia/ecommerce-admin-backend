@@ -45,3 +45,61 @@ export const permissionGroups = [
     actions: ["watch", "create", "read", "update", "delete"],
   },
 ];
+export const roles = [
+  {
+    name: "Super Administrator",
+    description: "Full system access",
+    isActive: true,
+  },
+  {
+    name: "Catalog Manager",
+    description: "Can manage catalog only",
+    isActive: true,
+  },
+];
+
+export const seedUsers = [
+  {
+    name: "Super Admin",
+    email: "admin@example.com",
+    password: "Admin@1234",
+    phone: "01700000000",
+    gender: "other",
+    isActive: true,
+    roleName: "Super Administrator",
+  },
+];
+
+export const catalogPermissions = [
+  "dashboard:watch",
+
+  "media:watch",
+  "media:read",
+  "media:upload",
+  "media:write",
+  "media:delete",
+
+  "category:watch",
+  "category:create",
+  "category:read",
+  "category:update",
+  "category:delete",
+
+  "brand:watch",
+  "brand:create",
+  "brand:read",
+  "brand:update",
+  "brand:delete",
+
+  "attribute:watch",
+  "attribute:create",
+  "attribute:read",
+  "attribute:update",
+  "attribute:delete",
+
+  "product:watch",
+  "product:create",
+  "product:read",
+  "product:update",
+  "product:delete",
+];
