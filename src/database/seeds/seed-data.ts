@@ -68,6 +68,15 @@ export const seedUsers = [
     isActive: true,
     roleName: "Super Administrator",
   },
+  {
+    name: "Catalog Manager",
+    email: "catalog@example.com",
+    password: "Catalog@1234",
+    phone: "01700000001",
+    gender: "female",
+    isActive: true,
+    roleName: "Catalog Manager",
+  },
 ];
 
 export const catalogPermissions = [
