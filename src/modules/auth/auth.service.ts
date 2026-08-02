@@ -79,7 +79,17 @@ export class AuthService {
       throw new AppError(404, "User not found");
     }
 
-    return mapUserResponse(user);
+    return {
+      user: mapUserResponse(user),
+      role: {
+        id: user.role.id,
+        name: user.role.name,
+      },
+
+      permissions: user.role.rolePermissions.map(
+        (rp) => rp.permission.name
+      ),
+    };
   }
 }
 
