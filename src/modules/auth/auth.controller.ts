@@ -28,23 +28,53 @@ class AuthController {
     }
   }
   getCurrentUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const result = await authService.getCurrentUser(req.user!.id);
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const result = await authService.getCurrentUser(req.user!.id);
 
-    sendResponse(res, {
-      statusCode: 200,
-      success: true,
-      message: "Current user fetched successfully",
-      data: result,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
+      sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "Current user fetched successfully",
+        data: result,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+  refresh = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { refreshToken } = req.body;
+
+      const result = await authService.refresh(refreshToken);
+
+      sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "Token refreshed successfully",
+        data: result,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+  logout = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await authService.logout(req.user!.id);
+
+      sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "Logged out successfully",
+        data: null,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export const authController = new AuthController();

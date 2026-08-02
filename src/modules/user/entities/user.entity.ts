@@ -62,7 +62,7 @@ export class User extends BaseEntity {
     length: 255,
     nullable: true,
   })
-  refreshTokenHash?: string;
+  refreshTokenHash?: string|null;
 
   @Column({
     name: "is_active",
